@@ -1,2 +1,2 @@
 # scenography
-PLEN visual programing tool
+PLEN visual programming tool
