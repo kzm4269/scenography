@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -151,6 +152,9 @@ public class ProgrammingFragment extends Fragment {
         try {
             list = PlenMotionJsonHelper.parseProgramList(file);
             Log.d(TAG, "open: " + file.getPath());
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, "Not found - " + e.getMessage());
+            return;
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
             Toast.makeText(getActivity(), "ファイルが開けません - " + file.getPath(), Toast.LENGTH_LONG).show();

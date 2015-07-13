@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jp.plen.plenconnect.ble.BLEDevice;
+//import jp.plen.plenconnect.ble.dummy.BLEDevice;
 import jp.plen.scenography.models.PlenMotion;
 import jp.plen.scenography.utils.PlenMotionJsonHelper;
 
@@ -92,7 +93,7 @@ public class ConnectionFragment extends Fragment {
         }
 
         List<String> program = new ArrayList<>();
-        for (PlenMotion motion: motions) {
+        for (PlenMotion motion : motions) {
             program.add(String.format("#SC%02X%02X", motion.getNumber(), motion.getLoopCount()));
         }
         program.add("$CR");
@@ -101,7 +102,7 @@ public class ConnectionFragment extends Fragment {
 
     private void showProgram() {
         StringBuilder builder = new StringBuilder();
-        for (String command: openProgram()) {
+        for (String command : openProgram()) {
             builder.append(command);
             builder.append("\n");
         }
@@ -110,7 +111,7 @@ public class ConnectionFragment extends Fragment {
 
     private void writeProgram() {
         List<String> program = openProgram();
-        for (String command: program) {
+        for (String command : program) {
             mDevice.write(command);
             Log.d(TAG, "send: " + command);
         }

@@ -3,10 +3,14 @@ package jp.plen.scenography.views;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.DragEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -16,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import jp.plen.scenography.R;
 import jp.plen.scenography.models.PlenMotion;
 import jp.plen.scenography.views.adapter.ProgramListAdapter;
 
@@ -29,35 +34,21 @@ public class ProgramListView extends ListView {
     private final List<PlenMotion> mPlenMotionList = new ArrayList<>();
     private final PlenMotion mInvisibleMotion = new PlenMotion(-1, "", "");
 
-    public ProgramListView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    private Runnable mLongClickCallback;
 
-        mAdapter = new ProgramListAdapter(getContext(), mPlenMotionList);
-        setAdapter(mAdapter);
-
-        OnItemLongClickListener listener = new OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position != INVALID_POSITION) {
-                    View child = getChildAt(position - getFirstVisiblePosition());
-                    Intent intent = new Intent().putExtra("motion_list", mAdapter.getItem(position).clone());
-                    ClipData data = ClipData.newIntent("intent", intent);
-                    mPlenMotionList.remove(mAdapter.getItem(position));
-                    mAdapter.notifyDataSetChanged();
-                    child.startDrag(data, new DragShadowBuilder(child), null, 0);
-                }
-                return true;
-            }
-        };
-        setOnItemLongClickListener(listener);
+    public ProgramListView(Context context) {
+        this(context, null);
     }
 
     public ProgramListView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public ProgramListView(Context context) {
-        this(context, null);
+    public ProgramListView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+
+        mAdapter = new ProgramListAdapter(getContext(), mPlenMotionList);
+        setAdapter(mAdapter);
     }
 
     @Override
@@ -142,5 +133,55 @@ public class ProgramListView extends ListView {
             mPlenMotionList.addAll(Arrays.asList((PlenMotion[]) program));
             mAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
+        Log.d(TAG, event.toString());
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            final int x = (int) event.getX();
+            final int y = (int) event.getY();
+            final int position = getChildIndexFromPosition(x, y);
+            if (position != INVALID_POSITION) {
+                if (mLongClickCallback != null)
+                    removeCallbacks(mLongClickCallback);
+
+                final View target = getChildAt(position - getFirstVisiblePosition());
+                mLongClickCallback = new Runnable() {
+                    @Override
+                    public void run() {
+                        View child = getChildAt(position - getFirstVisiblePosition());
+                        Intent intent = new Intent().putExtra("motion_list", mAdapter.getItem(position).clone());
+                        ClipData data = ClipData.newIntent("intent", intent);
+                        mPlenMotionList.remove(mAdapter.getItem(position));
+                        mAdapter.notifyDataSetChanged();
+                        if (child == target) {
+                            child.setPressed(true);
+                            child.startDrag(data, new DragShadowBuilder(child), null, 0);
+                        }
+                    }
+                };
+                postDelayed(mLongClickCallback, getContext().getResources().getInteger(R.integer.motion_list_long_press_msec));
+            }
+        } else if (event.getAction() == MotionEvent.ACTION_UP) {
+            if (mLongClickCallback != null)
+                removeCallbacks(mLongClickCallback);
+            mLongClickCallback = null;
+        }
+        return super.onTouchEvent(event);
+    }
+
+    private int getChildIndexFromPosition(int x, int y) {
+        int firstPosition = getFirstVisiblePosition();
+        int lastPosition = getLastVisiblePosition();
+        for (int position = firstPosition; position <= lastPosition; position++) {
+            View child = getChildAt(position - firstPosition);
+            if (child == null) continue;
+            Rect rect = new Rect();
+            child.getHitRect(rect);
+            if (rect.contains(x, y))
+                return position;
+        }
+        return INVALID_POSITION;
     }
 }

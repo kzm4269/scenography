@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Theme & Accent -->
+    <color name="theme200">@color/green200</color>
+    <color name="theme500">@color/green500</color>
+    <color name="theme600">@color/green600</color>
+    <color name="accent500">#1E88E5</color>
+
+    <!-- Cyan -->
+    <color name="cyan500">#00bcd4</color>
+    <color name="cyan600">#00acc1</color>
+
+    <!-- Green -->
+    <color name="green200">#a5d6a7</color>
+    <color name="green500">#4caf50</color>
+    <color name="green600">#43a047</color>
+
+    <!-- Grey scales -->
+    <color name="grey200">#EEEEEE</color>
+    <color name="grey600">#757575</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+</resources>

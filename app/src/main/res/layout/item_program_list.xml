@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:id="@+id/name"
-              xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="?android:activatedBackgroundIndicator"
-              android:gravity="center_vertical"
-              android:clickable="true"
-              android:longClickable="true"
-              android:orientation="horizontal">
+<LinearLayout
+    android:id="@+id/name"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:activatedBackgroundIndicator"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/motion_icon_view"
@@ -51,9 +50,9 @@
         android:layout_width="20pt"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:hint="1"
         android:ems="10"
-        android:longClickable="false"
-        android:inputType="numberSigned"/>
+        android:hint="1"
+        android:inputType="numberSigned"
+        android:longClickable="false"/>
 
 </LinearLayout>
