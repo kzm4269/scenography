@@ -1,14 +1,14 @@
 package jp.plen.scenography;
 
+import android.app.ActivityManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 
-import jp.plen.scenography.fragments.ConnectionFragment;
 import jp.plen.scenography.fragments.NavigationDrawerFragment;
-import jp.plen.scenography.fragments.ProgrammingFragment;
+import jp.plen.scenography.fragments.EditFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationDrawerFragment.Callbacks {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -26,9 +26,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
         setContentView(R.layout.activity_main);
 
         // 各ページのタイトル
-        mSectionTitles = new String[]{
-                getString(R.string.section_title_programming),
-                getString(R.string.section_title_connecting)};
+        mSectionTitles = new String[]{getString(R.string.title_edit_fragment)};
 
         // 状態復元
         if (savedInstanceState != null) {
@@ -38,11 +36,16 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
         // NavigationDrawerの設定
         NavigationDrawerFragment navigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         navigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout),
+                drawerLayout,
                 mSectionTitles,
                 mCurrentSectionNumber);
+
+        setTaskDescription(new ActivityManager.TaskDescription(
+                getString(R.string.app_name), null, getResources().getColor(R.color.theme600)));
     }
 
     @Override
@@ -59,10 +62,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 
         String title = mSectionTitles[position];
 
-        if (title.equals(getString(R.string.section_title_programming))) {
-            mCurrentSectionFragment = ProgrammingFragment.newInstance();
-        } else if (title.equals(getString(R.string.section_title_connecting))) {
-            mCurrentSectionFragment = ConnectionFragment.newInstance();
+        if (title.equals(getString(R.string.title_edit_fragment))) {
+            mCurrentSectionFragment = EditFragment.newInstance();
         } else {
             throw new AssertionError();
         }

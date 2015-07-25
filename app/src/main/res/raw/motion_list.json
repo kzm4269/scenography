@@ -1,6 +1,6 @@
 [
   {
-    "category": "normal",
+    "category": "NORMAL",
     "motions": [
       {
         "number": 0,
@@ -85,7 +85,7 @@
     ]
   },
   {
-    "category": "dance",
+    "category": "DANCE",
     "motions": [
       {
         "number": 30,
@@ -135,7 +135,7 @@
     ]
   },
   {
-    "category": "skate",
+    "category": "SKATE",
     "motions": [
       {
         "number": 40,
@@ -205,7 +205,7 @@
     ]
   },
   {
-    "category": "soccer",
+    "category": "SOCCER",
     "motions": [
       {
         "number": 23,
@@ -240,7 +240,7 @@
     ]
   },
   {
-    "category": "box",
+    "category": "BOX",
     "motions": [
       {
         "number": 10,
@@ -309,4 +309,4 @@
       }
     ]
   }
-].
+]

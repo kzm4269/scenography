@@ -17,8 +17,11 @@ import jp.plen.scenography.models.PlenMotion;
  * モーションデータの取り込み
  * Created by kzm4269 on 15/06/21.
  */
-public class PlenMotionJsonHelper {
+public final class PlenMotionJsonHelper {
     private static final String TAG = PlenMotionJsonHelper.class.getSimpleName();
+
+    private PlenMotionJsonHelper() {
+    }
 
     public static LinkedHashMap<CharSequence, List<PlenMotion>> parseMotionList(InputStream in) throws IOException {
         List<MotionListData> list = new ObjectMapper().readValue(in, new TypeReference<List<MotionListData>>() {
